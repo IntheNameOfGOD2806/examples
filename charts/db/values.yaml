@@ -1,0 +1,137 @@
+# ---------------------------------------------------------------
+# Default values for this Helm chart.
+# All resource names and the namespace are derived from the Helm
+# release name and the --namespace flag; nothing is hardcoded here.
+# ---------------------------------------------------------------
+
+# -- Number of pod replicas
+replicaCount: 2
+
+# ---------------------------------------------------------------
+# Image configuration
+# ---------------------------------------------------------------
+image:
+  # -- ECR (or any) registry + repository
+  repository: 296725355870.dkr.ecr.ap-southeast-1.amazonaws.com/bocbang-fe/bocbang-fe-image
+  # -- Image tag; defaults to chart's appVersion when empty
+  tag: ""
+  # -- Image pull policy
+  pullPolicy: Always
+
+# -- Secrets used to pull images from private registries
+imagePullSecrets:
+  - name: aws-bocbang-secret
+
+# -- Override the chart name
+nameOverride: ""
+# -- Override the full release name
+fullnameOverride: ""
+
+# ---------------------------------------------------------------
+# Pod / container settings
+# ---------------------------------------------------------------
+# -- Port the container listens on
+containerPort: 8080
+
+# -- Rolling update strategy settings
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 2
+    maxUnavailable: 2
+
+# -- How many old ReplicaSets to keep for rollback
+revisionHistoryLimit: 11
+
+# -- Extra environment variables to inject into the pod
+extraEnv: []
+# - name: MY_VAR
+#   value: "my-value"
+
+# -- Resource requests and limits (unset by default – add as needed)
+resources: {}
+# limits:
+#   cpu: 500m
+#   memory: 512Mi
+# requests:
+#   cpu: 250m
+#   memory: 256Mi
+
+# -- Node selector for pod scheduling
+nodeSelector: {}
+
+# -- Tolerations for pod scheduling
+tolerations: []
+
+# -- Affinity rules for pod scheduling
+affinity: {}
+
+# -- Pod-level annotations
+podAnnotations: {}
+
+# -- Pod-level labels
+podLabels: {}
+
+# ---------------------------------------------------------------
+# ConfigMap – Runtime application configuration
+# ---------------------------------------------------------------
+config:
+  # -- Toggle ConfigMap creation and volume-mount into the container
+  enabled: false
+
+  # -- Mount path inside the container
+  mountPath: /app/www/config.js
+
+  # -- Key inside the ConfigMap that holds the JS config file
+  subPath: config.js
+
+  # -- Application configuration values written into config.js
+  nodeEnv: "production"
+  nextPublicApiUrl: "https://api.localservices.democloud.xyz"
+  nextPublicAppName: "LocalServices Frontend"
+  apiBaseUrl: "https://api.localservices.democloud.xyz/v1"
+  nextPublicEnableAnalytics: "true"
+  port: "3000"
+  hostname: "0.0.0.0"
+
+# ---------------------------------------------------------------
+# Service configuration
+# ---------------------------------------------------------------
+service:
+  # -- Service type
+  type: ClusterIP
+  # -- Port exposed by the Service
+  port: 8887
+  # -- Target port on the pod
+  targetPort: 8080
+  # -- Protocol
+  protocol: TCP
+  # -- Session affinity
+  sessionAffinity: None
+
+# ---------------------------------------------------------------
+# Ingress configuration
+# ---------------------------------------------------------------
+ingress:
+  # -- Toggle Ingress resource creation
+  enabled: true
+
+  # -- Ingress class (e.g. nginx, traefik)
+  className: nginx
+
+  # -- Annotations applied to the Ingress object
+  annotations: {}
+  # nginx.ingress.kubernetes.io/rewrite-target: /
+
+  # -- Ingress rules
+  hosts:
+    - host: www.tranthanhdat.xyz
+      paths:
+        - path: /boc-bang-AI
+          pathType: Prefix
+
+  # -- TLS configuration (optional)
+  tls: []
+  # - secretName: bocbang-fe-tls
+  #   hosts:
+  #     - www.tranthanhdat.xyz

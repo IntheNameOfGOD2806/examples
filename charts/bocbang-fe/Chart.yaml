@@ -1,0 +1,23 @@
+apiVersion: v2
+name: bocbang-fe
+description: A Helm chart for the BocBang Frontend application (Next.js)
+
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+type: application
+
+# Chart version – increment each time templates or values change.
+version: 0.1.0
+
+# Application version – tracks the deployed application release.
+appVersion: "1.0.0"
+
+keywords:
+  - bocbang
+  - frontend
+  - nextjs
+
+maintainers:
+  - name: BocBang Team
+
+home: https://www.tranthanhdat.xyz

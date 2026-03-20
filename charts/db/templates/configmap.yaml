@@ -1,0 +1,38 @@
+{{- if .Values.config.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "app.configmapName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+data:
+  config.js: |
+    // Application Configuration (managed by Helm)
+    const config = {
+      NODE_ENV: {{ .Values.config.nodeEnv | quote }},
+
+      // Next.js Configuration
+      NEXT_PUBLIC_API_URL: {{ .Values.config.nextPublicApiUrl | quote }},
+      NEXT_PUBLIC_APP_NAME: {{ .Values.config.nextPublicAppName | quote }},
+
+      // API Endpoints
+      API_BASE_URL: {{ .Values.config.apiBaseUrl | quote }},
+
+      // Feature Flags
+      NEXT_PUBLIC_ENABLE_ANALYTICS: {{ .Values.config.nextPublicEnableAnalytics | quote }},
+
+      // Other Configuration
+      PORT: {{ .Values.config.port | quote }},
+      HOSTNAME: {{ .Values.config.hostname | quote }}
+    };
+
+    // Client-side (attach to window)
+    if (typeof window !== 'undefined') {
+      window._CONFIG = config;
+    }
+    // Server-side (Node.js)
+    if (typeof module !== 'undefined') {
+      module.exports = config;
+    }
+{{- end }}

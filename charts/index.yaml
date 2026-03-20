@@ -1,14 +1,25 @@
 apiVersion: v1
 entries:
   hello-world:
-  - apiVersion: v2
-    appVersion: 1.16.0
-    created: "2026-01-31T22:54:33.160526971+07:00"
-    description: A Helm chart for Kubernetes
-    digest: a080790b81f8fe07c14dd2e9c540f00e795ed133486d3e57d92b2721a45a4706
-    name: hello-world
-    type: application
-    urls:
-    - hello-world-0.1.0.tgz
-    version: 0.1.0
+    - apiVersion: v2
+      appVersion: 1.16.0
+      created: "2026-01-31T22:54:33.160526971+07:00"
+      description: A Helm chart for Kubernetes
+      digest: a080790b81f8fe07c14dd2e9c540f00e795ed133486d3e57d92b2721a45a4706
+      name: hello-world
+      type: application
+      urls:
+        - hello-world-0.1.0.tgz
+      version: 0.1.0
+  isc-fe:
+    - apiVersion: v2
+      appVersion: 1.16.0
+      created: "2026-01-31T22:54:33.160526971+07:00"
+      description: A Helm chart for Kubernetes
+      digest: a080790b81f8fe07c14dd2e9c540f00e795ed133486d3e57d92b2721a45a4706
+      name: isc-fe
+      type: application
+      urls:
+        - isc-fe-0.1.0.tgz
+      version: 0.1.0
 generated: "2026-01-31T22:54:33.160216183+07:00"

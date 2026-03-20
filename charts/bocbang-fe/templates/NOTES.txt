@@ -1,0 +1,38 @@
+Thank you for installing {{ .Chart.Name }}!
+
+Release    : {{ .Release.Name }}
+Namespace  : {{ .Release.Namespace }}
+Replicas   : {{ .Values.replicaCount }}
+Image      : {{ include "app.image" . }}
+
+{{- if .Values.ingress.enabled }}
+
+The application is reachable via Ingress:
+{{- range .Values.ingress.hosts }}
+  {{- range .paths }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $.Values.ingress.hosts | first | pluck "host" | first }}{{ .path }}
+  {{- end }}
+{{- end }}
+
+{{- else }}
+
+Ingress is disabled. To access the service locally run:
+  kubectl port-forward svc/{{ include "app.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} -n {{ .Release.Namespace }}
+  Open: http://localhost:{{ .Values.service.port }}
+
+{{- end }}
+
+{{- if .Values.config.enabled }}
+
+ConfigMap is mounted at: {{ .Values.config.mountPath }}
+API URL              : {{ .Values.config.nextPublicApiUrl }}
+
+{{- else }}
+
+ConfigMap is DISABLED. Enable with:
+  --set config.enabled=true
+
+{{- end }}
+
+To upgrade:
+  helm upgrade {{ .Release.Name }} ./charts/{{ .Chart.Name }} -n {{ .Release.Namespace }} -f your-values.yaml
